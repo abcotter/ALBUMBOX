@@ -2,16 +2,30 @@
 	div(
 		class="postcard-wrapper"
 	)
+		div(
+			class="image"
+		) image
+		
 </template>
 
 <script>
-export default {};
+export default {
+	props: ["image"]
+};
 </script>
 
 <style lang="scss">
 .postcard-wrapper {
-	// width: 100%;
-	// height: 100%;
-	// border: 4px solid #efefef;
+	width: 100%;
+	height: 100%;
+	display: flex;
+	padding-top: 15px;
+	justify-content: center;
+
+	.image {
+		width: 90%;
+		height: 90%;
+		background-color: #000000;
+	}
 }
 </style>

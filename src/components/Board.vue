@@ -6,14 +6,28 @@
 			class="header"
 		)
 			div(
-				class="title"
-			) POSTCARD
+				style="display: flex;"
+			)
+				div(
+					class="title"
+				) POSTCARD /
+				div(
+					class="title"
+				) &nbsp; Summer 2020{{boardName}}
 		div(
-			class="body"
+			class="board-body"
 		)
 			div(
-
-			) My Boards
+				v-for="image in images"
+				:key="image"
+				class="image-card"
+			)
+				ImageCard(
+					:image="image"
+				)
+				div(
+					class="image-date"
+				) Date
 </template>
 
 <script>
@@ -58,10 +72,29 @@ export default {
 		}
 	}
 
-	.body {
+	.board-body {
 		height: 100%;
 		padding: 30px;
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		grid-auto-rows: 40vw;
+		grid-gap: 30px;
 		overflow: scroll;
+
+		.image-card {
+			width: 100%;
+			height: 100%;
+			background-color: #efefef;
+			display: flex;
+			flex-direction: column;
+		}
+
+		.image-date {
+			height: 30px;
+			font-size: 20px;
+			font-family: "Permanent Marker";
+			padding-bottom: 30px;
+		}
 	}
 }
 </style>
