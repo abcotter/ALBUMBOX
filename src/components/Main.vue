@@ -54,46 +54,43 @@
 </template>
 
 <script>
-// import axios from "axios";
+import axios from "axios";
 
 export default {
 	components: {},
+	//Life hooks
+	mounted() {
+		this.getBoards();
+	},
 	// Data
 	data() {
 		return {
 			addBoardModal: false,
+			boards: [],
 			boardName: null
 		};
 	},
-	computed: {
-		boards() {
-			return [
-				{
-					id: 1,
-					name: "hello"
-				},
-				{
-					id: 2,
-					name: "good day"
-				},
-				{
-					id: 3,
-					name: "howdy"
-				},
-				{
-					id: 4,
-					name: "bonjour"
-				},
-				{
-					id: 5,
-					name: "hola"
-				}
-			];
-		}
-	},
+	computed: {},
 	// Methods
 	methods: {
-		onClickNewBoard() {}
+		getBoards() {
+			axios.get(`${this.$apiURL}getBoards`).then(response => {
+				this.boards = JSON.parse(response);
+			});
+		},
+		onClickNewBoard() {
+			if (this.boardName == null) {
+				this.$toast.error("you forgot a name!");
+			} else {
+				let data = {
+					name: this.boardName
+				};
+				axios.post(`${this.$apiURL}createBoard`, data).then(response => {
+					console.log(response);
+					this.getBoards();
+				});
+			}
+		}
 	}
 };
 </script>
