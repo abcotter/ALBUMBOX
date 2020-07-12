@@ -21,6 +21,7 @@
 					class="board-list-item"
 					v-for="board in boards"
 					:key="board.id"
+					@click="goToBoard(board)"
 				) {{ board.name }}
 			button(
 				class="add-new-board-button"
@@ -77,6 +78,13 @@ export default {
 			axios.get(`${this.$apiURL}getBoards`).then(response => {
 				this.boards = response.data;
 			});
+		},
+		goToBoard(board) {
+			this.$router.push({
+				path: `/board/${board.id}/${board.name}`
+				// params: { id: board.id, name: board.name }
+			});
+			console.log("route", board);
 		},
 		onClickNewBoard() {
 			if (this.boardName == null) {

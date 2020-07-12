@@ -13,7 +13,7 @@
 				) POSTCARD / &nbsp;
 				div(
 					class="board-title"
-				) Summer 2020{{boardName}}
+				) {{$route.params.boardName}}
 		div(
 			class="board-body"
 		)
