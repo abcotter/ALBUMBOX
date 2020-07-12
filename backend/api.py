@@ -12,6 +12,12 @@ app.config['MYSQL_DB'] = 'postcardDB'
 mysql = MySQL(app)
 
 
+def get_post_data(name):
+    data = request.get_json()
+    value = data[name]
+    return(value)
+
+
 @app.route('/')
 def hello_world():
     return 'loser!'
@@ -21,18 +27,25 @@ def hello_world():
 def getBoards():
     res = []
     cur = mysql.connection.cursor()
-    cur.execute('''SELECT boardID, boardName FROM board''')
+    cur.execute('SELECT boardID, boardName FROM board')
     for board in cur:
         res.append({
-            'id': board.boardID,
-            'name': board.boardName
+            'id': board[0],
+            'name': board[1]
         })
     return jsonify(res)
 
 
 @app.route('/createBoard', methods=['POST'])
 def createBorad():
+    param = get_post_data('name')
+    sql = 'INSERT INTO board (boardName) VALUES (%s);'
     cur = mysql.connection.cursor()
-    cur.execute('''SELECT user, host FROM mysql.user''')
-    rv = cur.fetchall()
-    return str(rv)
+    cur.execute(sql, [param])
+    mysql.connection.commit()
+    cur.execute("select max(boardID) from board")
+    row = cur.fetchone()[0]
+    res = [
+        {'boardID': row, 'boardName': param}
+    ]
+    return jsonify(res)

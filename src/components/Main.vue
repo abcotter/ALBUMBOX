@@ -75,7 +75,7 @@ export default {
 	methods: {
 		getBoards() {
 			axios.get(`${this.$apiURL}getBoards`).then(response => {
-				this.boards = JSON.parse(response);
+				this.boards = response.data;
 			});
 		},
 		onClickNewBoard() {
@@ -85,8 +85,7 @@ export default {
 				let data = {
 					name: this.boardName
 				};
-				axios.post(`${this.$apiURL}createBoard`, data).then(response => {
-					console.log(response);
+				axios.post(`${this.$apiURL}createBoard`, data).then(() => {
 					this.getBoards();
 				});
 			}
