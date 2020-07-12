@@ -1,19 +1,19 @@
 <template lang="pug">
 	div(
-		class="main"
+		class="board-main"
 	)
 		div(
-			class="header"
+			class="board-header"
 		)
 			div(
 				style="display: flex;"
 			)
 				div(
-					class="title"
-				) POSTCARD /
+					class="board-title"
+				) POSTCARD / &nbsp;
 				div(
-					class="title"
-				) &nbsp; Summer 2020{{boardName}}
+					class="board-title"
+				) Summer 2020{{boardName}}
 		div(
 			class="board-body"
 		)
@@ -51,20 +51,20 @@ export default {
 @import url("https://fonts.googleapis.com/css?family=Permanent+Marker");
 @import url("https://fonts.googleapis.com/css?family=Cedarville+Cursive");
 
-.main {
+.board-main {
 	width: 100%;
 	height: 100%;
 	background-color: rgba(230, 184, 156, 0.6);
 	padding-bottom: 30px;
 
-	.header {
+	.board-header {
 		height: 40px;
-		background-color: rgba(230, 184, 156, 0.7);
+		background-color: rgba(230, 184, 156, 0.6);
 		display: flex;
 		padding: 10px 25px 10px 25px;
 		justify-content: space-between;
 
-		.title {
+		.board-title {
 			vertical-align: middle;
 			font-size: 30px;
 			font-weight: 600;
@@ -73,13 +73,13 @@ export default {
 	}
 
 	.board-body {
-		height: 100%;
 		padding: 30px;
 		display: grid;
 		grid-template-columns: repeat(3, 1fr);
 		grid-auto-rows: 40vw;
 		grid-gap: 30px;
 		overflow: scroll;
+		background-color: rgba(230, 184, 156, 1);
 
 		.image-card {
 			width: 100%;
@@ -87,6 +87,7 @@ export default {
 			background-color: #efefef;
 			display: flex;
 			flex-direction: column;
+			margin-bottom: 30px;
 		}
 
 		.image-date {
