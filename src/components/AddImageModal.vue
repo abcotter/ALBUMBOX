@@ -22,10 +22,48 @@
 				section(
 					class="modal-body"
 				)
+					div(
+						style="display: flex;"
+					)
+						div(
+
+						) Image:
+						input(
+							type="file"
+						)
+					div(
+						style="display: flex;"
+					)
+						div(
+
+						) Date:
+						DatePicker(
+							
+						)
+					div(
+						style="display: flex;"
+					)
+						div(
+
+						)
+							div(
+								
+							) Message:
+							div(
+
+							) (max. 300)
+						textarea(
+							type="text"
+							maxlength="300"
+						)
 </template>
 <script>
+import DatePicker from "v-calendar/lib/components/date-picker.umd";
+
 export default {
-	name: "modal",
+	components: {
+		DatePicker
+	},
 	methods: {
 		close() {
 			this.$emit("close");
