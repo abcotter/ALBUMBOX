@@ -21,6 +21,7 @@ export default {
 	display: flex;
 	padding-top: 15px;
 	justify-content: center;
+	background-color: #efefef;
 
 	.image {
 		width: 90%;

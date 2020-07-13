@@ -18,11 +18,21 @@
 				class="board-list"
 			)
 				li(
-					class="board-list-item"
+					class="board-list"
 					v-for="board in boards"
 					:key="board.id"
-					@click="goToBoard(board)"
-				) {{ board.name }}
+				)
+					div(
+						style="display: flex;"
+					)
+						div(
+							class="board-list-item"
+							@click="goToBoard(board)"
+						) {{ board.name }}
+						button(
+							class="delete-item"
+							@click="deleteBoard(board)"
+						) x
 			button(
 				class="add-new-board-button"
 				@click="addBoardModal = !addBoardModal"
@@ -74,6 +84,14 @@ export default {
 	computed: {},
 	// Methods
 	methods: {
+		deleteBoard(board) {
+			let data = {
+				id: board.id
+			};
+			axios.post(`${this.$apiURL}deleteBoard`, data).then(() => {
+				this.getBoards();
+			});
+		},
 		getBoards() {
 			axios.get(`${this.$apiURL}getBoards`).then(response => {
 				this.boards = response.data;
@@ -82,9 +100,7 @@ export default {
 		goToBoard(board) {
 			this.$router.push({
 				path: `/board/${board.id}/${board.name}`
-				// params: { id: board.id, name: board.name }
 			});
-			console.log("route", board);
 		},
 		onClickNewBoard() {
 			if (this.boardName == null) {
@@ -93,8 +109,13 @@ export default {
 				let data = {
 					name: this.boardName
 				};
-				axios.post(`${this.$apiURL}createBoard`, data).then(() => {
+				axios.post(`${this.$apiURL}createBoard`, data).then(response => {
+					let board = {
+						id: response.data.boardID,
+						name: response.data.boardName
+					};
 					this.getBoards();
+					this.goToBoard(board);
 				});
 			}
 		}
@@ -133,24 +154,36 @@ export default {
 		.board-list {
 			width: 200px;
 			max-height: 300px;
-			padding-top: 10px;
-			padding-bottom: 10px;
-			padding-left: 75px;
+			padding-left: 13px;
 			margin-top: 10px;
 			margin: auto;
 			list-style-type: circle;
+			display: flex;
+			flex-direction: column;
+			justify-content: space-between;
 
 			.board-list-item {
 				font-size: 20px;
 				font-weight: 500;
 				width: 100%;
-				margin-left: 15px;
 				text-align: left;
 			}
 
 			.board-list-item:hover {
 				color: #efefef;
 				cursor: pointer;
+			}
+
+			.delete-item {
+				background-color: transparent;
+				border: none;
+				font-size: 13px;
+				font-weight: 600;
+
+				&:hover {
+					cursor: pointer;
+					font-weight: 900;
+				}
 			}
 		}
 
@@ -164,6 +197,7 @@ export default {
 			border-radius: 5px;
 			border: none;
 			margin-bottom: 15px;
+			margin-top: 15px;
 
 			&:hover {
 				width: 173px;

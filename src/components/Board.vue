@@ -9,11 +9,17 @@
 				style="display: flex;"
 			)
 				div(
-					class="board-title"
+					class="board-title home"
+					@click="$router.push('/')"
 				) POSTCARD / &nbsp;
 				div(
 					class="board-title"
+					style="padding-left: 10px;"
 				) {{$route.params.boardName}}
+			button(
+				class="add-new-memory-button"
+				@click="enableAddImageModal"
+			) Add Memory
 		div(
 			class="board-body"
 		)
@@ -28,21 +34,53 @@
 				div(
 					class="image-date"
 				) Date
+		AddImageModal(
+			v-show="showAddImageModal"
+			@close="closeModal"
+		)
 </template>
 
 <script>
+import axios from "axios";
 import ImageCard from "./ImageCard.vue";
-
-const testData = Array.from(Array(10).keys());
+import AddImageModal from "./AddImageModal.vue";
 
 export default {
 	components: {
+		AddImageModal,
 		ImageCard
 	},
+	//lifehooks
+	mounted() {
+		this.getImages();
+	},
+	// Data
 	data() {
 		return {
-			images: testData
+			images: null,
+			showAddImageModal: false
 		};
+	},
+	// Methods
+	methods: {
+		closeModal() {
+			this.showAddImageModal = false;
+		},
+		enableAddImageModal() {
+			this.showAddImageModal = true;
+		},
+		getImages() {
+			let boardId = this.$route.params.boardid;
+			axios
+				.get(`${this.$apiURL}getBoardImages`, {
+					params: {
+						boardId
+					}
+				})
+				.then(response => {
+					this.images = response.data;
+				});
+		}
 	}
 };
 </script>
@@ -59,7 +97,7 @@ export default {
 
 	.board-header {
 		height: 40px;
-		background-color: rgba(230, 184, 156, 0.6);
+		background-color: rgba(230, 184, 156, 1);
 		display: flex;
 		padding: 10px 25px 10px 25px;
 		justify-content: space-between;
@@ -70,6 +108,29 @@ export default {
 			font-weight: 600;
 			font-family: "Permanent Marker";
 		}
+
+		.add-new-memory-button {
+			width: 150px;
+			height: 30px;
+			background-color: #904e55;
+			color: #efefef;
+			font-size: 13px;
+			font-weight: 600;
+			border-radius: 5px;
+			border: none;
+			margin-top: 5px;
+
+			&:hover {
+				width: 151px;
+				height: 31px;
+				background-color: #843f55;
+				cursor: pointer;
+			}
+		}
+
+		.home:hover {
+			cursor: pointer;
+		}
 	}
 
 	.board-body {
@@ -79,7 +140,6 @@ export default {
 		grid-auto-rows: 40vw;
 		grid-gap: 30px;
 		overflow: scroll;
-		background-color: rgba(230, 184, 156, 1);
 
 		.image-card {
 			width: 100%;
