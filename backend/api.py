@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify, make_response, send_file
 from flask_mysqldb import MySQL
 from flask_cors import CORS
 from base64 import b64encode
-import io
+import io, os, glob
 
 app = Flask(__name__, static_url_path="/static")
 CORS(app, resources={r"/*": {"origins": "*"}})
@@ -64,9 +64,22 @@ def create_board():
 
 @app.route("/deleteBoard", methods=["POST"])
 def delete_board():
-    param = get_post_data("id")
-    sql = "DELETE FROM board WHERE boardID = (%s);"
     cur = mysql.connection.cursor()
+    param = get_post_data("id")
+    sql = "SELECT imageID FROM image_board WHERE boardID = %s;"
+    cur.execute(sql, [param])
+    images = cur.fetchall()[0]
+    if len(images) == 1:
+        sql = "DELETE FROM image WHERE imageID = %s"
+        cur.execute(sql, images)
+    elif len(images) > 1:
+        sql = "DELETE FROM image WHERE imageID IN %s"
+        cur.execute(sql, images)
+    for image in images:
+        path = glob.glob(f"static/images/{image}.*")[0]
+        if os.path.exists(path):
+            os.remove(path)
+    sql = "DELETE FROM board WHERE boardID = (%s);"
     cur.execute(sql, [param])
     sql = "DELETE FROM image_board WHERE boardID = (%s);"
     cur.execute(sql, [param])
