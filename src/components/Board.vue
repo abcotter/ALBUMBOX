@@ -25,7 +25,7 @@
 		)
 			div(
 				v-for="image in images"
-				:key="image"
+				:key="image.id"
 				class="image-card"
 			)
 				ImageCard(
@@ -35,6 +35,7 @@
 					class="image-date"
 				) Date
 		AddImageModal(
+			:boardID = "this.$route.params.boardid"
 			v-show="showAddImageModal"
 			@close="closeModal"
 		)

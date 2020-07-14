@@ -2,15 +2,21 @@
 	div(
 		class="postcard-wrapper"
 	)
-		div(
+		img(
 			class="image"
-		) image
+			:src="url"
+		)
 		
 </template>
 
 <script>
 export default {
-	props: ["image"]
+	props: ["image"],
+	computed: {
+		url() {
+			return `${this.$apiURL}static/images/${this.image.imageID}.jpeg`;
+		}
+	}
 };
 </script>
 

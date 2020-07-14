@@ -7,11 +7,13 @@ import VueToast from 'vue-toast-notification';
 import 'vue-toast-notification/dist/theme-sugar.css';
 import './assets/toast.scss';
 
-Vue.config.productionTip = false
+Vue.config.productionTip = false;
+Vue.config.ignoredElements = ['ion-icon'];
+
 Vue.use(VueToast, {
 	position: 'bottom',
 	duration: 2500
-})
+});
 
 Vue.prototype.$apiURL = APIURL;
 
