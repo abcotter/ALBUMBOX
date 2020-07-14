@@ -99,6 +99,7 @@ export default {
 			date: new Date(),
 			description: null,
 			file: null,
+			fileType: null,
 			fileUploaded: false
 		};
 	},
@@ -116,20 +117,28 @@ export default {
 			let formData = new FormData();
 
 			formData.append("file", this.file);
+			formData.append("fileType", this.fileType);
 			formData.append("memDate", memDate);
 			formData.append("memDescription", memDescription);
 			formData.append("altText", this.file.name);
 			formData.append("boardId", this.boardID);
 
-			axios.post(`${this.$apiURL}addImage`, formData).then(response => {
-				console.log(response);
+			axios.post(`${this.$apiURL}addImage`, formData).then(() => {
+				this.file = null;
+				this.fileType = null;
+				this.fileUploaded = false;
+				this.description = null;
+				this.$emit("add:image");
+				this.close();
 			});
 		},
 		close() {
 			this.$emit("close");
 		},
 		onChangeInputFile($event) {
-			this.file = $event.target.files[0];
+			let file = $event.target.files[0];
+			this.file = file;
+			this.fileType = file.type.split("/")[1];
 			this.fileUploaded = true;
 		}
 	}

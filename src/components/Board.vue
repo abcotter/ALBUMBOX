@@ -33,11 +33,12 @@
 				)
 				div(
 					class="image-date"
-				) Date
+				) {{image.date}}
 		AddImageModal(
 			:boardID = "this.$route.params.boardid"
 			v-show="showAddImageModal"
 			@close="closeModal"
+			@add:image="getImages"
 		)
 </template>
 

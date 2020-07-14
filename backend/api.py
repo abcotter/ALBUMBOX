@@ -4,7 +4,7 @@ from flask_cors import CORS
 from base64 import b64encode
 import io
 
-app = Flask(__name__)
+app = Flask(__name__, static_url_path="/static")
 CORS(app, resources={r"/*": {"origins": "*"}})
 
 app.config["MYSQL_HOST"] = "127.0.0.1"
@@ -30,12 +30,13 @@ def hello_world():
 def add_image():
     data = request.form.to_dict()
     imageFile = request.files["file"]
+    fileType = data["fileType"]
     memDate = data["memDate"]
     memDescription = data["memDescription"]
     altText = data["altText"]
     boardId = data["boardId"]
-    params = (altText, imageFile, memDate, memDescription)
-    sql = "INSERT INTO image (altText, imageFile, memDate, memDesciption) VALUES (%s, %b, %s, %s); SELECT LAST_INSERT_ID();"
+    params = (altText, memDate, fileType, memDescription)
+    sql = "INSERT INTO image (altText, memDate, fileType, memDesciption) VALUES (%s, %s, %s, %s); SELECT LAST_INSERT_ID();"
     connection = mysql.connection
     cur = connection.cursor()
     cur.execute(sql, params)
@@ -45,7 +46,7 @@ def add_image():
     sql = "INSERT INTO image_board (imageID, boardID) VALUES (%s, %s)"
     cur.execute(sql, params)
     mysql.connection.commit()
-    return jsonify("success")
+    return jsonify(row)
 
 
 @app.route("/createBoard", methods=["POST"])
@@ -87,7 +88,7 @@ def get_boards():
 def get_board_images():
     res = []
     param = request.args.get("boardId")
-    sql = "SELECT image.imageID, image.altText, image.memDate, image.memDesciption FROM image INNER JOIN image_board ON image.imageID = image_board.imageID WHERE image_board.boardID = %s;"
+    sql = "SELECT image.imageID, image.altText, image.memDate, image.fileType, image.memDesciption FROM image INNER JOIN image_board ON image.imageID = image_board.imageID WHERE image_board.boardID = %s;"
     cur = mysql.connection.cursor()
     cur.execute(sql, [param])
     for image in cur:
@@ -96,26 +97,8 @@ def get_board_images():
                 "imageID": image[0],
                 "altText": image[1],
                 "date": image[2],
-                "description": image[3],
+                "description": image[4],
+                "imageURL": f"http://127.0.0.1:5000/static/images/{image[0]}.{image[3]}",
             }
         )
     return jsonify(res)
-
-
-@app.route("/getImage", methods=["GET"])
-def getimage():
-    param = request.args.get("imageID")
-    sql = "SELECT image.imageFile FROM image WHERE imageID = %s;"
-    cur = mysql.connection.cursor()
-    cur.execute(sql, [param])
-    res = cur.fetchone()[0]
-    image = b64encode(res).decode("utf-8")
-    response = make_response(image)
-    response.headers.set("Content-Type", "image/jpeg")
-    print(response)
-    return send_file(
-        io.BytesIO(image),
-        mimetype="image/jpeg",
-        as_attachment=False,
-        attachment_filename="%s.jpg" % param,
-    )

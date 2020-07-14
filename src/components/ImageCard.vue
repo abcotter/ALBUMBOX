@@ -4,19 +4,14 @@
 	)
 		img(
 			class="image"
-			:src="url"
+			:src="image.imageURL"
 		)
 		
 </template>
 
 <script>
 export default {
-	props: ["image"],
-	computed: {
-		url() {
-			return `${this.$apiURL}static/images/${this.image.imageID}.jpeg`;
-		}
-	}
+	props: ["image"]
 };
 </script>
 
@@ -33,6 +28,7 @@ export default {
 		width: 90%;
 		height: 90%;
 		background-color: #000000;
+		object-fit: cover;
 	}
 }
 </style>
