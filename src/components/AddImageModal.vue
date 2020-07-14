@@ -100,7 +100,8 @@ export default {
 			description: null,
 			file: null,
 			fileType: null,
-			fileUploaded: false
+			fileUploaded: false,
+			acceptedTypes: ["jpeg", "png", "jpg"]
 		};
 	},
 	// Methods
@@ -136,6 +137,14 @@ export default {
 			this.$emit("close");
 		},
 		onChangeInputFile($event) {
+			if (
+				!this.acceptedTypes.includes($event.target.files[0].type.split("/")[1])
+			) {
+				this.$toast.error(
+					"Please make sure you image is of type: .jpeg, .png, .jpg"
+				);
+				return;
+			}
 			let file = $event.target.files[0];
 			this.file = file;
 			this.fileType = file.type.split("/")[1];
