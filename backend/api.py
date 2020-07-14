@@ -41,7 +41,7 @@ def add_image():
     cur = connection.cursor()
     cur.execute(sql, params)
     row = connection.insert_id()
-    imageFile.save(f"static/images/{row}.jpeg")
+    imageFile.save(f"static/images/{row}.{fileType}")
     params = (row, boardId)
     sql = "INSERT INTO image_board (imageID, boardID) VALUES (%s, %s)"
     cur.execute(sql, params)

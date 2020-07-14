@@ -31,9 +31,6 @@
 				ImageCard(
 					:image="image"
 				)
-				div(
-					class="image-date"
-				) {{image.date}}
 		AddImageModal(
 			:boardID = "this.$route.params.boardid"
 			v-show="showAddImageModal"
@@ -96,6 +93,7 @@ export default {
 	height: 100%;
 	background-color: rgba(230, 184, 156, 0.6);
 	padding-bottom: 30px;
+	overflow: scroll;
 
 	.board-header {
 		height: 40px;
@@ -141,22 +139,13 @@ export default {
 		grid-template-columns: repeat(3, 1fr);
 		grid-auto-rows: 40vw;
 		grid-gap: 30px;
-		overflow: scroll;
 
 		.image-card {
 			width: 100%;
 			height: 100%;
-			background-color: #efefef;
 			display: flex;
 			flex-direction: column;
 			margin-bottom: 30px;
-		}
-
-		.image-date {
-			height: 30px;
-			font-size: 20px;
-			font-family: "Permanent Marker";
-			padding-bottom: 30px;
 		}
 	}
 }
