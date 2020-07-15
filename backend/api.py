@@ -33,6 +33,8 @@ def add_image():
     fileType = data["fileType"]
     memDate = data["memDate"]
     memDescription = data["memDescription"]
+    if memDescription == "null":
+        memDescription = ""
     altText = data["altText"]
     boardId = data["boardId"]
     params = (altText, memDate, fileType, memDescription)

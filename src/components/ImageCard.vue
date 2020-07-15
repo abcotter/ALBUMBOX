@@ -45,7 +45,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import url("https://fonts.googleapis.com/css?family=Cedarville+Cursive");
+@import url("https://fonts.googleapis.com/css?family=Indie+Flower");
 .postcard-wrapper {
 	width: 100%;
 	height: 100%;
@@ -100,7 +100,7 @@ export default {
 
 	.image-back {
 		transform: rotateY(180deg);
-		font-family: "Cedarville Cursive";
+		font-family: "Indie Flower";
 		font-size: 20px;
 		background-color: #fff;
 

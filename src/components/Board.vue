@@ -11,15 +11,30 @@
 				div(
 					class="board-title home"
 					@click="$router.push('/')"
-				) POSTCARD / &nbsp;
+				) MiFOTO / &nbsp;
 				div(
 					class="board-title"
 					style="padding-left: 10px;"
 				) {{$route.params.boardName}}
-			button(
-				class="add-new-memory-button"
-				@click="enableAddImageModal"
-			) Add Memory
+			div(
+				
+			)
+				button(
+					v-if="!isEditMode"
+					class="add-new-memory-button"
+					style="margin-right: 5px;"
+					@click="toggleEditMode"
+				) Edit
+				button(
+					v-if="isEditMode"
+					class="add-new-memory-button"
+					style="margin-right: 5px;"
+					@click="stopEditMode"
+				) Done
+				button(
+					class="add-new-memory-button"
+					@click="enableAddImageModal"
+				) Add Memory
 		div(
 			class="board-body"
 		)
@@ -27,10 +42,20 @@
 				v-for="image in images"
 				:key="image.id"
 				class="image-card"
+				:class="{ shake : isEditMode }"
 			)
 				ImageCard(
 					:image="image"
 				)
+				div(
+					v-if="isEditMode"
+					class="overlay"
+					@click="deleteImage(image)"
+				)
+					ion-icon(
+						name="close-circle-outline"
+						style="z-index: 3; font-size: 60px; padding-top: 55%;"
+					)
 		AddImageModal(
 			:boardID = "this.$route.params.boardid"
 			v-show="showAddImageModal"
@@ -57,6 +82,7 @@ export default {
 	data() {
 		return {
 			images: null,
+			isEditMode: false,
 			showAddImageModal: false
 		};
 	},
@@ -64,6 +90,9 @@ export default {
 	methods: {
 		closeModal() {
 			this.showAddImageModal = false;
+		},
+		deleteImage($event) {
+			console.log($event);
 		},
 		enableAddImageModal() {
 			this.showAddImageModal = true;
@@ -79,6 +108,12 @@ export default {
 				.then(response => {
 					this.images = response.data;
 				});
+		},
+		stopEditMode() {
+			this.isEditMode = false;
+		},
+		toggleEditMode() {
+			this.isEditMode = true;
 		}
 	}
 };
@@ -87,6 +122,50 @@ export default {
 <style lang="scss">
 @import url("https://fonts.googleapis.com/css?family=Permanent+Marker");
 @import url("https://fonts.googleapis.com/css?family=Cedarville+Cursive");
+
+@keyframes shake {
+	0% {
+		transform: translate(0.5px, 0.5px) rotate(0deg);
+	}
+	10% {
+		transform: translate(-0.5px, -1px) rotate(-0.5deg);
+	}
+	20% {
+		transform: translate(-1.5px, 0px) rotate(0.5deg);
+	}
+	30% {
+		transform: translate(1.5px, 1px) rotate(0deg);
+	}
+	40% {
+		transform: translate(0.5px, -0.5px) rotate(0.5deg);
+	}
+	50% {
+		transform: translate(-0.5px, 1px) rotate(-0.5deg);
+	}
+	60% {
+		transform: translate(-1.5px, 0.5px) rotate(0deg);
+	}
+	70% {
+		transform: translate(1.5px, 0.5px) rotate(-0.5deg);
+	}
+	80% {
+		transform: translate(-0.5px, -0.5px) rotate(0.5deg);
+	}
+	90% {
+		transform: translate(0.5px, 1px) rotate(0deg);
+	}
+	100% {
+		transform: translate(0.5px, -1px) rotate(-0.5deg);
+	}
+}
+
+.shake {
+	/* Start the shake animation and make the animation last for 0.5 seconds */
+	animation: shake 0.8s;
+
+	/* When the animation is finished, start again */
+	animation-iteration-count: infinite;
+}
 
 .board-main {
 	width: 100%;
@@ -121,8 +200,6 @@ export default {
 			margin-top: 5px;
 
 			&:hover {
-				width: 151px;
-				height: 31px;
 				background-color: #843f55;
 				cursor: pointer;
 			}
@@ -136,8 +213,8 @@ export default {
 	.board-body {
 		padding: 30px;
 		display: grid;
-		grid-template-columns: repeat(3, 1fr);
-		grid-auto-rows: 40vw;
+		grid-template-columns: repeat(4, 1fr);
+		grid-auto-rows: 30vw;
 		grid-gap: 30px;
 
 		.image-card {
@@ -146,6 +223,23 @@ export default {
 			display: flex;
 			flex-direction: column;
 			margin-bottom: 30px;
+			position: relative;
+
+			.overlay {
+				background: #b1182f;
+				height: 100%;
+				width: 100%;
+				opacity: 0;
+				z-index: 2;
+				position: absolute;
+				padding: 0;
+				transition: opacity 0.5s;
+
+				&:hover {
+					opacity: 0.6;
+					transition: opacity 0.5s;
+				}
+			}
 		}
 	}
 }

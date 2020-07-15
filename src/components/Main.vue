@@ -7,7 +7,7 @@
 		)
 			div(
 				class="title"
-			) POSTCARD
+			) ALBUMBOX
 		div(
 			class="main-body"
 		)
