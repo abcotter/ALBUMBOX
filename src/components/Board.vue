@@ -11,7 +11,7 @@
 				div(
 					class="board-title home"
 					@click="$router.push('/')"
-				) MiFOTO / &nbsp;
+				) ALBUMBOX / &nbsp;
 				div(
 					class="board-title"
 					style="padding-left: 10px;"
@@ -32,6 +32,18 @@
 					@click="stopEditMode"
 				) Done
 				button(
+					v-if="!isDeleteMode"
+					class="add-new-memory-button"
+					style="margin-right: 5px;"
+					@click="toggleDeleteMode"
+				) Delete
+				button(
+					v-if="isDeleteMode"
+					class="add-new-memory-button"
+					style="margin-right: 5px;"
+					@click="stopDeleteMode"
+				) Done
+				button(
 					class="add-new-memory-button"
 					@click="enableAddImageModal"
 				) Add Memory
@@ -42,25 +54,40 @@
 				v-for="image in images"
 				:key="image.id"
 				class="image-card"
-				:class="{ shake : isEditMode }"
+				:class="{ shake : isDeleteMode || isEditMode }"
 			)
 				ImageCard(
 					:image="image"
 				)
 				div(
-					v-if="isEditMode"
-					class="overlay"
+					v-if="isDeleteMode"
+					class="delete-overlay"
 					@click="deleteImage(image)"
 				)
 					ion-icon(
 						name="close-circle-outline"
 						style="z-index: 3; font-size: 60px; padding-top: 55%;"
 					)
+				div(
+					v-if="isEditMode"
+					class="edit-overlay"
+					@click="enableEditModal(image)"
+				)
+					ion-icon(
+						name="pencil-outline"
+						style="z-index: 3; font-size: 60px; padding-top: 55%;"
+					)
 		AddImageModal(
 			:boardID = "this.$route.params.boardid"
 			v-show="showAddImageModal"
-			@close="closeModal"
+			@close="closeAddModal"
 			@add:image="getImages"
+		)
+		EditImageModal(
+			:image = "imageToEdit"
+			v-show="showEditImageModal"
+			@close="closeEditModal"
+			@edit:memory="getImages"
 		)
 </template>
 
@@ -68,10 +95,12 @@
 import axios from "axios";
 import ImageCard from "./ImageCard.vue";
 import AddImageModal from "./AddImageModal.vue";
+import EditImageModal from "./EditImageModal.vue";
 
 export default {
 	components: {
 		AddImageModal,
+		EditImageModal,
 		ImageCard
 	},
 	//lifehooks
@@ -82,20 +111,39 @@ export default {
 	data() {
 		return {
 			images: null,
+			imageToEdit: null,
+			isDeleteMode: false,
 			isEditMode: false,
-			showAddImageModal: false
+			showAddImageModal: false,
+			showEditImageModal: false
 		};
 	},
 	// Methods
 	methods: {
-		closeModal() {
+		closeAddModal() {
 			this.showAddImageModal = false;
 		},
+		closeEditModal() {
+			this.showEditImageModal = false;
+		},
 		deleteImage($event) {
-			console.log($event);
+			let data = {
+				id: $event.imageID
+			};
+			axios.post(`${this.$apiURL}deleteImage`, data).then(() => {
+				this.getImages();
+			});
 		},
 		enableAddImageModal() {
+			this.isEditMode = false;
+			this.isDeleteMode = false;
 			this.showAddImageModal = true;
+		},
+		enableEditModal($event) {
+			this.isEditMode = false;
+			this.isDeleteMode = false;
+			this.imageToEdit = $event;
+			this.showEditImageModal = true;
 		},
 		getImages() {
 			let boardId = this.$route.params.boardid;
@@ -109,10 +157,18 @@ export default {
 					this.images = response.data;
 				});
 		},
+		stopDeleteMode() {
+			this.isDeleteMode = false;
+		},
+		toggleDeleteMode() {
+			this.isEditMode = false;
+			this.isDeleteMode = true;
+		},
 		stopEditMode() {
 			this.isEditMode = false;
 		},
 		toggleEditMode() {
+			this.isDeleteMode = false;
 			this.isEditMode = true;
 		}
 	}
@@ -176,7 +232,7 @@ export default {
 
 	.board-header {
 		height: 40px;
-		background-color: rgba(230, 184, 156, 1);
+		background-color: transparent;
 		display: flex;
 		padding: 10px 25px 10px 25px;
 		justify-content: space-between;
@@ -189,7 +245,8 @@ export default {
 		}
 
 		.add-new-memory-button {
-			width: 150px;
+			padding-left: 3px;
+			padding-right: 3px;
 			height: 30px;
 			background-color: #904e55;
 			color: #efefef;
@@ -225,7 +282,7 @@ export default {
 			margin-bottom: 30px;
 			position: relative;
 
-			.overlay {
+			.delete-overlay {
 				background: #b1182f;
 				height: 100%;
 				width: 100%;
@@ -237,6 +294,22 @@ export default {
 
 				&:hover {
 					opacity: 0.6;
+					transition: opacity 0.5s;
+				}
+			}
+
+			.edit-overlay {
+				background: #d8d8d8;
+				height: 100%;
+				width: 100%;
+				opacity: 0;
+				z-index: 2;
+				position: absolute;
+				padding: 0;
+				transition: opacity 0.5s;
+
+				&:hover {
+					opacity: 0.4;
 					transition: opacity 0.5s;
 				}
 			}

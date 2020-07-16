@@ -89,6 +89,20 @@ def delete_board():
     return jsonify("success")
 
 
+@app.route("/deleteImage", methods=["POST"])
+def delete_image():
+    cur = mysql.connection.cursor()
+    param = get_post_data("id")
+    print(param)
+    sql = "DELETE FROM image WHERE imageID = %s"
+    cur.execute(sql, [param])
+    path = glob.glob(f"static/images/{param}.*")[0]
+    if os.path.exists(path):
+        os.remove(path)
+    mysql.connection.commit()
+    return jsonify("success")
+
+
 @app.route("/getBoards", methods=["GET"])
 def get_boards():
     res = []
@@ -97,6 +111,19 @@ def get_boards():
     for board in cur:
         res.append({"id": board[0], "name": board[1]})
     return jsonify(res)
+
+
+@app.route("/editImage", methods=["POST"])
+def edit_image():
+    data = request.form.to_dict()
+    imageId = data["imageID"]
+    memDescription = data["memDescription"]
+    cur = mysql.connection.cursor()
+    params = (memDescription, imageId)
+    sql = "UPDATE image SET memDesciption = %s WHERE imageID = %s;"
+    cur.execute(sql, params)
+    mysql.connection.commit()
+    return jsonify("success")
 
 
 @app.route("/getBoardImages", methods=["GET"])
