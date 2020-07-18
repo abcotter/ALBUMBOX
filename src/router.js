@@ -3,12 +3,21 @@ import VueRouter from 'vue-router';
 
 Vue.use(VueRouter);
 
+import Login from './components/Login.vue'
 import Main from './components/Main.vue'
 import Board from './components/Board.vue';
 
 const routes = [
 	{
 		path: "/",
+		component: Login
+	},
+	{
+		path: "/login",
+		component: Login
+	},
+	{
+		path: "/home",
 		component: Main
 	},
 	{

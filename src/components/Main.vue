@@ -18,6 +18,7 @@
 				right
 			)
 				ion-icon(
+					style="font-size: 30px; padding-left: 9px; cursor: default;"
 					name="person-circle-outline"
 				)
 				span(
@@ -33,8 +34,17 @@
 					class="board-section"
 				)
 					div(
-						style="font-size: 50px; font-weight: 600; margin-bottom: 10px; font-family: Permanent Marker"
-					) Boards
+						style="display: flex; justify-content: space-around;"
+					)
+						div(
+							style="font-size: 50px; font-weight: 600; margin-bottom: 10px; font-family: Permanent Marker"
+						) Boards
+						ion-icon(
+							v-if="!isEditMode"
+							@click="isEditMode = true"
+							name="pencil-outline"
+							class="edit-icon"
+						)
 					div(
 						class="board-list"
 						v-for="board in boards"
@@ -46,9 +56,11 @@
 							div(
 								class="board-list-item"
 								@click="goToBoard(board)"
+								@mouseover="hovered = board.id"
+								@mouseleave="hovered = null"
 							) {{ board.name }}
 							button(
-								v-if="false"
+								v-if="isEditMode"
 								class="delete-item"
 								@click="deleteBoard(board)"
 							)
@@ -56,9 +68,15 @@
 									name="close-outline"
 								)
 					button(
+						v-if="!isEditMode"
 						class="add-new-board-button"
 						@click="addBoardModal = !addBoardModal"
 					) Add New Board
+					button(
+						v-if="isEditMode"
+						class="add-new-board-button"
+						@click="isEditMode = false"
+					) Done
 				div(
 					class="new-board-section"
 				)
@@ -118,7 +136,9 @@ export default {
 		return {
 			addBoardModal: false,
 			boards: [],
-			boardName: null
+			boardName: null,
+			hovered: null,
+			isEditMode: false
 		};
 	},
 	computed: {},
@@ -221,6 +241,15 @@ export default {
 				background-color: rgba(240, 226, 226, 0.89);
 				border-right: 3px solid #1b1b1b;
 				width: 400px;
+
+				.edit-icon {
+					margin-top: 30px;
+					font-size: 20px;
+
+					&:hover {
+						font-size: 21px;
+					}
+				}
 
 				.add-new-board-button {
 					width: 160px;

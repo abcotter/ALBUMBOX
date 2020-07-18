@@ -70,17 +70,19 @@ def delete_board():
     param = get_post_data("id")
     sql = "SELECT imageID FROM image_board WHERE boardID = %s;"
     cur.execute(sql, [param])
-    images = cur.fetchall()[0]
+    print(len(cur.fetchall()))
+    images = cur.fetchall()[0] if len(cur.fetchall()) > 0 else []
     if len(images) == 1:
         sql = "DELETE FROM image WHERE imageID = %s"
         cur.execute(sql, images)
     elif len(images) > 1:
         sql = "DELETE FROM image WHERE imageID IN %s"
         cur.execute(sql, images)
-    for image in images:
-        path = glob.glob(f"static/images/{image}.*")[0]
-        if os.path.exists(path):
-            os.remove(path)
+    if len(images) >= 1:
+        for image in images:
+            path = glob.glob(f"static/images/{image}.*")[0]
+            if os.path.exists(path):
+                os.remove(path)
     sql = "DELETE FROM board WHERE boardID = (%s);"
     cur.execute(sql, [param])
     sql = "DELETE FROM image_board WHERE boardID = (%s);"

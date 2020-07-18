@@ -41,7 +41,7 @@
 								textarea(
 									type="text"
 									maxlength="300"
-									style="width: 200px; height: 200px;"
+									style="width: 250px; height: 220px; font-size: 15px;"
 									:placeholder="image.description"
 									v-model="description"
 								)

@@ -58,7 +58,7 @@
 							)
 					div(
 						class="input-row"
-						style="padding-right: 40px;"
+						style="padding-left: 61px;"
 					)
 						div(
 							class="input-label"
@@ -76,7 +76,7 @@
 						textarea(
 							type="text"
 							maxlength="300"
-							style="width: 200px; height: 200px;"
+							style="width: 250px; height: 220px; font-size: 15px;"
 							v-model="description"
 						)
 					button(
