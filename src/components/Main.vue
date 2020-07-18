@@ -17,6 +17,15 @@
 			Slide(
 				right
 			)
+				ion-icon(
+					name="person-circle-outline"
+				)
+				span(
+
+				) Edit Profile
+				span(
+
+				) Logout
 			div(
 				class="main-body"
 			)

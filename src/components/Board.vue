@@ -16,20 +16,32 @@
 					class="board-title"
 					style="padding-left: 10px;"
 				) {{$route.params.boardName}}
-			Slide(
-				right
-				:isOpen="showDropdown"
-				@openMenu="showDropdown = true"
+			div(
+				style="display: flex;"
 			)
-				span(
-					@click="toggleEditMode"
-				) Edit
-				span(
-					@click="toggleDeleteMode"
-				) delete
-				span(
-					@click="enableAddImageModal"
-				) Add New Memory
+				button(
+					v-if="isEditMode || isDeleteMode"
+					class="add-new-memory-button"
+					@click="onDone"
+				) Done
+				Slide(
+					right
+					:isOpen="showDropdown"
+					@openMenu="showDropdown = true"
+					:burgerIcon="showBurger"
+				)
+					span(
+						@click="toggleEditMode"
+					) Edit Memories
+					span(
+						@click="toggleDeleteMode"
+					) Delete Memories
+					span(
+						@click="enableAddImageModal"
+					) Add New Memory
+					span(
+						@click="enableAddImageModal"
+					) Delete Board
 		div(
 			class="board-body"
 		)
@@ -102,6 +114,7 @@ export default {
 			isEditMode: false,
 			options: ["Edit", "Delete", "Add New Memory"],
 			showAddImageModal: false,
+			showBurger: true,
 			showDropdown: false,
 			showEditImageModal: false
 		};
@@ -146,18 +159,29 @@ export default {
 					this.images = response.data;
 				});
 		},
+		onDone() {
+			if (this.isEditMode) {
+				this.stopEditMode();
+			} else {
+				this.stopDeleteMode();
+			}
+		},
 		stopDeleteMode() {
+			this.showBurger = true;
 			this.isDeleteMode = false;
 		},
 		toggleDeleteMode() {
+			this.showBurger = false;
 			this.showDropdown = false;
 			this.isEditMode = false;
 			this.isDeleteMode = true;
 		},
 		stopEditMode() {
+			this.showBurger = true;
 			this.isEditMode = false;
 		},
 		toggleEditMode() {
+			this.showBurger = false;
 			this.showDropdown = false;
 			this.isDeleteMode = false;
 			this.isEditMode = true;
@@ -255,7 +279,8 @@ export default {
 			padding-left: 3px;
 			padding-right: 3px;
 			margin-top: 30px;
-			height: 30px;
+			height: 60px;
+			width: 60px;
 			background-color: #904e55;
 			color: #efefef;
 			font-size: 13px;

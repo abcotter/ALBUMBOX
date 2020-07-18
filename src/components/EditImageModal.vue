@@ -113,7 +113,7 @@ export default {
 }
 
 .modal {
-	background: rgb(230, 199, 181);
+	background: rgba(211, 174, 174, 0.89);
 	display: flex;
 	flex-direction: column;
 	width: 900px;
