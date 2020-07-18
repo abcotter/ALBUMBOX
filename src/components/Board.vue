@@ -10,7 +10,7 @@
 			)
 				div(
 					class="board-title home"
-					@click="$router.push('/home')"
+					@click="$router.push(`/home/${$route.params.userid}`)"
 				) ALBUMBOX / &nbsp;
 				div(
 					class="board-title"
