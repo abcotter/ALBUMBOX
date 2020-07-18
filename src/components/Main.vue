@@ -14,67 +14,92 @@
 				div(
 					class="title"
 				) ALBUMBOX
+			Slide(
+				right
+			)
 			div(
 				class="main-body"
 			)
 				div(
-					style="font-size: 50px; font-weight: 600; margin-bottom: 10px; font-family: Permanent Marker"
-				) Boards
-				ul(
-					class="board-list"
+					class="board-section"
 				)
-					li(
+					div(
+						style="font-size: 50px; font-weight: 600; margin-bottom: 10px; font-family: Permanent Marker"
+					) Boards
+					div(
 						class="board-list"
 						v-for="board in boards"
 						:key="board.id"
 					)
 						div(
-							style="display: flex;"
+							style="display: flex; margin-bottom: 20px;"
 						)
 							div(
 								class="board-list-item"
 								@click="goToBoard(board)"
 							) {{ board.name }}
 							button(
+								v-if="false"
 								class="delete-item"
 								@click="deleteBoard(board)"
-							) x
-				button(
-					class="add-new-board-button"
-					@click="addBoardModal = !addBoardModal"
-				) Add New Board
+							)
+								ion-icon(
+									name="close-outline"
+								)
+					button(
+						class="add-new-board-button"
+						@click="addBoardModal = !addBoardModal"
+					) Add New Board
 				div(
-					v-show="addBoardModal"
+					class="new-board-section"
 				)
 					div(
-						class="new-board-form"
+						v-show="addBoardModal"
 					)
 						div(
-							style="margin-bottom: 10px;"
-						) To get started just give us an awesome name for your new board!
-						div(
-
+							class="new-board-form"
 						)
-							span(
-							) Board Name: &nbsp;
-							input(
-								class="board-name-input"
-								type="text"
-								placeholder="Insert name here!"
-								v-model="boardName"
+							div(
+								style="display: flex;"
 							)
-						button(
-							class="add-new-board-button"
-							style="margin: auto;"
-							@click="onClickNewBoard"
-						) Create
+								div(
+									style="margin-bottom: 40px; margin-top: 80px; font-size: 30px;"
+								) To get started just give us an awesome name for your new board!
+								div(
+									@click="addBoardModal = false;"
+									class="close-icon"
+								)
+									ion-icon(
+										style="font-size: 30px;"
+										name="close-outline"
+									)
+							div(
+								
+							)
+								span(
+									style="font-size: 20px;"
+								) Board Name: &nbsp;
+								input(
+									class="board-name-input"
+									type="text"
+									placeholder="Insert name here!"
+									v-model="boardName"
+								)
+							button(
+								class="add-new-board-button"
+								style="margin: auto;"
+								@click="onClickNewBoard"
+							) Create
 </template>
 
 <script>
 import axios from "axios";
+import { Slide } from "vue-burger-menu";
 
 export default {
-	components: {},
+	components: {
+		Slide
+	},
 	//Life hooks
 	mounted() {
 		this.getBoards();
@@ -160,8 +185,8 @@ export default {
 		flex-direction: column;
 
 		.header {
-			height: 14%;
-			background-color: transparent;
+			height: 85px;
+			background-color: rgba(211, 174, 174, 0.89);
 			display: flex;
 			padding: 10px 25px 10px 25px;
 			justify-content: space-between;
@@ -170,95 +195,124 @@ export default {
 
 			.title {
 				vertical-align: middle;
-				font-size: 90px;
+				font-size: 60px;
 				font-weight: 600;
 				font-family: "Permanent Marker";
 			}
 		}
 
 		.main-body {
-			padding: 30px;
 			overflow: scroll;
-			justify-items: end;
-			float: left;
-			background-color: #efefef;
-			opacity: 0.9;
-			border-right: 3px solid #1b1b1b;
-			width: 400px;
+			width: 100%;
 			height: 100%;
+			display: flex;
 
-			.board-list {
-				width: 200px;
-				max-height: 300px;
-				padding-left: 13px;
-				margin-top: 10px;
-				margin: auto;
-				list-style-type: circle;
-				display: flex;
-				flex-direction: column;
-				justify-content: space-between;
+			.board-section {
+				padding: 30px;
+				background-color: rgba(240, 226, 226, 0.89);
+				border-right: 3px solid #1b1b1b;
+				width: 400px;
 
-				.board-list-item {
-					font-size: 20px;
-					font-weight: 500;
-					width: 100%;
-					text-align: left;
-				}
-
-				.board-list-item:hover {
+				.add-new-board-button {
+					width: 160px;
+					height: 50px;
+					border-radius: 5px;
+					background-color: #904e55;
 					color: #efefef;
-					cursor: pointer;
-				}
-
-				.delete-item {
-					background-color: transparent;
-					border: none;
-					font-size: 13px;
+					font-size: 15px;
 					font-weight: 600;
+					border: none;
 
 					&:hover {
+						background-color: #843f55;
 						cursor: pointer;
+					}
+				}
+
+				.board-list {
+					width: 300px;
+					max-height: 300px;
+					margin: auto;
+					display: flex;
+					flex-direction: column;
+					justify-content: space-between;
+
+					.board-list-item {
+						font-size: 20px;
+						font-weight: 500;
+						text-align: center;
+						line-height: 40px;
+						height: 40px;
+						border-radius: 5px;
+						width: 100%;
+						background-color: #eeebeb;
+						border: 1px solid #dfdcdc;
+					}
+
+					.board-list-item:hover {
 						font-weight: 900;
+						background-color: #dfdbdb;
+						cursor: pointer;
+					}
+					.delete-item {
+						background-color: transparent;
+						border: none;
+						font-size: 20px;
+						font-weight: 600;
+
+						&:hover {
+							cursor: pointer;
+							font-weight: 900;
+						}
 					}
 				}
 			}
 
-			.add-new-board-button {
-				width: 170px;
-				height: 30px;
-				background-color: #904e55;
-				color: #efefef;
-				font-size: 15px;
-				font-weight: 600;
-				border-radius: 5px;
-				border: none;
-				margin-bottom: 15px;
-				margin-top: 15px;
-
-				&:hover {
-					width: 173px;
-					height: 32px;
-					background-color: #843f55;
-					cursor: pointer;
-				}
-			}
-
-			.new-board-form {
-				margin: auto;
-				padding: 10px;
-				width: 400px;
-				height: 200px;
-				background-color: rgba(230, 184, 156, 0.7);
-				border: 2px solid rgba(230, 184, 156, 1);
-				border-radius: 7px;
+			.new-board-section {
+				width: 100%;
 				display: flex;
-				flex-direction: column;
-				justify-content: space-between;
+				justify-content: space-around;
 
-				.board-name-input {
-					height: 30px;
-					font-size: 15px;
-					padding-left: 5px;
+				.new-board-form {
+					padding: 10px;
+					margin-top: 25%;
+					width: 600px;
+					height: 500px;
+					background-color: rgba(211, 174, 174, 0.89);
+					border: 2px solid rgba(172, 140, 140, 0.89);
+					border-radius: 7px;
+					display: flex;
+					flex-direction: column;
+					justify-content: space-between;
+
+					.close-icon {
+						height: 40px;
+						&:hover {
+							cursor: pointer;
+						}
+					}
+
+					.board-name-input {
+						height: 30px;
+						font-size: 20px;
+						padding-left: 5px;
+					}
+
+					.add-new-board-button {
+						width: 160px;
+						height: 40px;
+						border-radius: 5px;
+						background-color: #904e55;
+						color: #efefef;
+						font-size: 15px;
+						font-weight: 600;
+						border: none;
+
+						&:hover {
+							background-color: #843f55;
+							cursor: pointer;
+						}
+					}
 				}
 			}
 		}

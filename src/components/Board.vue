@@ -16,37 +16,20 @@
 					class="board-title"
 					style="padding-left: 10px;"
 				) {{$route.params.boardName}}
-			div(
-				
+			Slide(
+				right
+				:isOpen="showDropdown"
+				@openMenu="showDropdown = true"
 			)
-				button(
-					v-if="!isEditMode"
-					class="add-new-memory-button"
-					style="margin-right: 5px;"
+				span(
 					@click="toggleEditMode"
 				) Edit
-				button(
-					v-if="isEditMode"
-					class="add-new-memory-button"
-					style="margin-right: 5px;"
-					@click="stopEditMode"
-				) Done
-				button(
-					v-if="!isDeleteMode"
-					class="add-new-memory-button"
-					style="margin-right: 5px;"
+				span(
 					@click="toggleDeleteMode"
-				) Delete
-				button(
-					v-if="isDeleteMode"
-					class="add-new-memory-button"
-					style="margin-right: 5px;"
-					@click="stopDeleteMode"
-				) Done
-				button(
-					class="add-new-memory-button"
+				) delete
+				span(
 					@click="enableAddImageModal"
-				) Add Memory
+				) Add New Memory
 		div(
 			class="board-body"
 		)
@@ -93,6 +76,8 @@
 
 <script>
 import axios from "axios";
+import { Slide } from "vue-burger-menu";
+
 import ImageCard from "./ImageCard.vue";
 import AddImageModal from "./AddImageModal.vue";
 import EditImageModal from "./EditImageModal.vue";
@@ -101,7 +86,8 @@ export default {
 	components: {
 		AddImageModal,
 		EditImageModal,
-		ImageCard
+		ImageCard,
+		Slide
 	},
 	//lifehooks
 	mounted() {
@@ -114,7 +100,9 @@ export default {
 			imageToEdit: null,
 			isDeleteMode: false,
 			isEditMode: false,
+			options: ["Edit", "Delete", "Add New Memory"],
 			showAddImageModal: false,
+			showDropdown: false,
 			showEditImageModal: false
 		};
 	},
@@ -135,6 +123,7 @@ export default {
 			});
 		},
 		enableAddImageModal() {
+			this.showDropdown = false;
 			this.isEditMode = false;
 			this.isDeleteMode = false;
 			this.showAddImageModal = true;
@@ -161,6 +150,7 @@ export default {
 			this.isDeleteMode = false;
 		},
 		toggleDeleteMode() {
+			this.showDropdown = false;
 			this.isEditMode = false;
 			this.isDeleteMode = true;
 		},
@@ -168,6 +158,7 @@ export default {
 			this.isEditMode = false;
 		},
 		toggleEditMode() {
+			this.showDropdown = false;
 			this.isDeleteMode = false;
 			this.isEditMode = true;
 		}
@@ -226,27 +217,44 @@ export default {
 .board-main {
 	width: 100%;
 	height: 100%;
-	background-color: rgba(230, 184, 156, 0.6);
+	background-image: url("../../public/board.png");
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: cover;
 	padding-bottom: 30px;
 	overflow: scroll;
 
 	.board-header {
-		height: 40px;
-		background-color: transparent;
+		height: 85px;
+		background-color: rgba(211, 174, 174, 0.89);
 		display: flex;
 		padding: 10px 25px 10px 25px;
 		justify-content: space-between;
+		border-bottom: 3px solid #1b1b1b;
 
 		.board-title {
 			vertical-align: middle;
-			font-size: 30px;
+			font-size: 60px;
 			font-weight: 600;
 			font-family: "Permanent Marker";
+		}
+
+		.dropdown {
+			position: relative;
+			width: 200px;
+			height: 130px;
+			perspective: 1000px;
+			display: block;
+			z-index: 100;
+			padding-inline-start: 0px;
+			list-style-type: none;
+			background-color: #efef;
 		}
 
 		.add-new-memory-button {
 			padding-left: 3px;
 			padding-right: 3px;
+			margin-top: 30px;
 			height: 30px;
 			background-color: #904e55;
 			color: #efefef;
