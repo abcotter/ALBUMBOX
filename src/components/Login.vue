@@ -10,19 +10,59 @@ div(
 		class="left-side"
 	)
 		div(
+			v-if="!signup"
 			class="login"
 		)
 			input(
 				class="login-input"
-				placeholder="Email or Username"
+				placeholder="Email"
+				v-model="email"
+			)
+			input(
+				type="password"
+				class="login-input"
+				placeholder= "Password"
+				v-model="password"
+			) 
+		div(
+			v-if="signup"
+			class="login"
+		)
+			input(
+				class="login-input"
+				placeholder="Enter Email"
+				v-model="email"
+			)
+			input(
+				type="password"
+				class="login-input"
+				placeholder= "Enter Password"
+				v-model="password"
 			)
 			input(
 				class="login-input"
-				placeholder= "Password"
+				placeholder= "Enter Nickname"
+				v-model="name"
 			) 
 		div(
+			v-if="!signup"
 			class="login-label"
 			@click="Login"
+		) LOGIN
+		div(
+			v-if="signup"
+			class="login-label"
+			@click="createAccount"
+		) CREATE ACCOUNT
+		div(
+			v-if="!signup"
+			style="font-sixe: 15px; color: #efefef; cursor: pointer;"
+			@click="signup = true"
+		) SIGN-UP
+		div(
+			v-if="signup"
+			style="font-sixe: 15px; color: #efefef; cursor: pointer;"
+			@click="signup = false"
 		) LOGIN
 	div(
 		class="right-side"
@@ -36,11 +76,46 @@ div(
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
 	// Data
+	data() {
+		return {
+			email: null,
+			name: null,
+			password: null,
+			signup: false
+		};
+	},
 	// Methods
 	methods: {
-		Login() {}
+		createAccount() {
+			let email = this.email;
+			if (!this.email || !this.name || !this.password) {
+				this.$toast.error("You are missing some important information!");
+				return;
+			}
+			if (this.ValidateEmail(email)) {
+				let data = {
+					email: email,
+					name: this.name,
+					password: this.password
+				};
+				axios.post(`${this.$apiURL}createAccount`, data).then(response => {
+					console.log(response);
+				});
+			}
+		},
+		Login() {},
+		ValidateEmail(mail) {
+			let pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+			if (pattern.test(mail)) {
+				return true;
+			}
+			this.$toast.error("You have entered an invalid email address!");
+			return false;
+		}
 	}
 };
 </script>
@@ -56,7 +131,7 @@ export default {
 		top: 30px;
 		left: 30px;
 		padding: 15px;
-		width: 900px;
+		width: 850px;
 		background: rgba(237, 179, 174, 0.856);
 		font-size: 135px;
 		text-shadow: 3px 3px rgba(172, 121, 121, 0.938);
@@ -71,10 +146,10 @@ export default {
 
 		.login {
 			width: 400px;
-			height: 280px;
+			height: 330px;
 			margin: auto;
 			border-radius: 5px;
-			margin-top: 48%;
+			margin-top: 35vh;
 			padding-left: 65px;
 
 			.login-input {
@@ -96,6 +171,7 @@ export default {
 			font-size: 35px;
 			font-weight: 600;
 			text-shadow: 2px 2px rgba(172, 121, 121, 0.938);
+			cursor: pointer;
 		}
 	}
 
@@ -115,7 +191,7 @@ export default {
 			border: 20px solid #efefef;
 			border-bottom: 100px solid #efefef;
 			margin: auto;
-			margin-top: 25%;
+			margin-top: 28vh;
 
 			.polaroid-text {
 				color: #532127;

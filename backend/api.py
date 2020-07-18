@@ -51,6 +51,29 @@ def add_image():
     return jsonify(row)
 
 
+@app.route("/createAccount", methods=["POST"])
+def create_account():
+    sql = "SELECT email FROM user WHERE email=%s"
+    params = (get_post_data("email"),)
+    cur = mysql.connection.cursor()
+    cur.execute(sql, params)
+    result = cur.fetchone()
+    print("result")
+    print(result)
+    if result:
+        return jsonify(message="A user with this e-mail already exists."), 401
+    else:
+        params = (
+            get_post_data("email"),
+            get_post_data("password"),
+            get_post_data("name"),
+        )
+        sql = "INSERT INTO user (email, password, name) VALUES (%s, %s, %s);"
+        cur.execute(sql, params)
+        mysql.connection.commit()
+        return jsonify("success"), 200
+
+
 @app.route("/createBoard", methods=["POST"])
 def create_board():
     param = get_post_data("name")
