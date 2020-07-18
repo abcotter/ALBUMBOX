@@ -141,7 +141,11 @@ export default {
 			isEditMode: false
 		};
 	},
-	computed: {},
+	computed: {
+		userID() {
+			return this.$route.params.userid;
+		}
+	},
 	// Methods
 	methods: {
 		deleteBoard(board) {
@@ -153,13 +157,15 @@ export default {
 			});
 		},
 		getBoards() {
-			axios.get(`${this.$apiURL}getBoards`).then(response => {
-				this.boards = response.data;
-			});
+			axios
+				.get(`${this.$apiURL}getBoards`, { params: { userid: this.userID } })
+				.then(response => {
+					this.boards = response.data;
+				});
 		},
 		goToBoard(board) {
 			this.$router.push({
-				path: `/board/${board.id}/${board.name}`
+				path: `/board/${this.userID}/${board.id}/${board.name}`
 			});
 		},
 		onClickNewBoard() {

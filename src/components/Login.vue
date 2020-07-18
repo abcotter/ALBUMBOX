@@ -107,7 +107,24 @@ export default {
 				});
 			}
 		},
-		Login() {},
+		Login() {
+			if (!this.email || !this.password) {
+				this.$toast.error("You are missing some important information!");
+				return;
+			}
+			let data = {
+				email: this.email,
+				password: this.password
+			};
+			axios.get(`${this.$apiURL}login`, { params: data }).then(response => {
+				if (response.status == 200) {
+					console.log(response.data.userID);
+					this.$router.push({
+						path: `/home/${response.data.userID}`
+					});
+				}
+			});
+		},
 		ValidateEmail(mail) {
 			let pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 			if (pattern.test(mail)) {

@@ -17,11 +17,11 @@ const routes = [
 		component: Login
 	},
 	{
-		path: "/home",
+		path: "/home/:userid",
 		component: Main
 	},
 	{
-		path: "/board/:boardid/:boardName",
+		path: "/board/:userid/:boardid/:boardName",
 		component: Board
 	}
 ];

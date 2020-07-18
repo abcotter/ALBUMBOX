@@ -58,8 +58,6 @@ def create_account():
     cur = mysql.connection.cursor()
     cur.execute(sql, params)
     result = cur.fetchone()
-    print("result")
-    print(result)
     if result:
         return jsonify(message="A user with this e-mail already exists."), 401
     else:
@@ -130,9 +128,12 @@ def delete_image():
 
 @app.route("/getBoards", methods=["GET"])
 def get_boards():
+    userid = (request.args.get("userid"),)
+    sql = "SELECT board.boardID, board.boardName FROM board INNER JOIN user_board ON board.boardID = user_board.boardID WHERE user_board.userID = %s"
     res = []
     cur = mysql.connection.cursor()
-    cur.execute("SELECT boardID, boardName FROM board")
+    cur.execute(sql, userid)
+    print(cur)
     for board in cur:
         res.append({"id": board[0], "name": board[1]})
     return jsonify(res)
@@ -169,3 +170,21 @@ def get_board_images():
             }
         )
     return jsonify(res)
+
+
+@app.route("/login", methods=["GET"])
+def login():
+    email = request.args.get("email")
+    password = request.args.get("password")
+    sql = "SELECT email, password, userID FROM user WHERE email=%s"
+    params = (email,)
+    cur = mysql.connection.cursor()
+    cur.execute(sql, params)
+    result = cur.fetchone()
+    if result == None:
+        return jsonify(message="A user with this e-mail doesn't appear to exists."), 401
+    else:
+        if result[1] == password:
+            response = {"userID": result[2]}
+            print(response)
+            return jsonify(response), 200
