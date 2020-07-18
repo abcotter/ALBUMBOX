@@ -18,7 +18,7 @@
 				right
 			)
 				ion-icon(
-					style="font-size: 30px; padding-left: 9px; cursor: default;"
+					style="font-size: 30px; color: #efefef; padding-left: 9px; cursor: default;"
 					name="person-circle-outline"
 				)
 				span(
@@ -37,7 +37,7 @@
 						style="display: flex; justify-content: space-around;"
 					)
 						div(
-							style="font-size: 50px; font-weight: 600; margin-bottom: 10px; font-family: Permanent Marker"
+							style="font-size: 50px; font-weight: 600; margin-bottom: 10px; color: #efefef; text-shadow: 3px 3px rgba(172, 121, 121, 0.938; font-family: Permanent Marker"
 						) Boards
 						ion-icon(
 							v-if="!isEditMode"
@@ -215,12 +215,14 @@ export default {
 
 		.header {
 			height: 85px;
-			background-color: rgba(211, 174, 174, 0.89);
+			background-color: rgba(237, 179, 174, 0.6);
 			display: flex;
 			padding: 10px 25px 10px 25px;
 			justify-content: space-between;
 			opacity: 1;
-			border-bottom: 3px solid #1b1b1b;
+			color: #efefef;
+			text-shadow: 3px 3px rgba(172, 121, 121, 0.938);
+			border-bottom: 3px solid #efefef;
 
 			.title {
 				vertical-align: middle;
@@ -238,9 +240,9 @@ export default {
 
 			.board-section {
 				padding: 30px;
-				background-color: rgba(240, 226, 226, 0.89);
-				border-right: 3px solid #1b1b1b;
-				width: 400px;
+				background-color: rgba(211, 174, 174, 0.89);
+				border-right: 3px solid #efefef;
+				width: 800px;
 
 				.edit-icon {
 					margin-top: 30px;

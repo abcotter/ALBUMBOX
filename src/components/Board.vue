@@ -10,7 +10,7 @@
 			)
 				div(
 					class="board-title home"
-					@click="$router.push('/')"
+					@click="$router.push('/home')"
 				) ALBUMBOX / &nbsp;
 				div(
 					class="board-title"
@@ -264,17 +264,20 @@ export default {
 
 	.board-header {
 		height: 85px;
-		background-color: rgba(211, 174, 174, 0.89);
+		background-color: rgba(237, 179, 174, 0.6);
 		display: flex;
 		padding: 10px 25px 10px 25px;
 		justify-content: space-between;
-		border-bottom: 3px solid #1b1b1b;
+		border-bottom: 3px solid #efefef;
 
 		.board-title {
 			vertical-align: middle;
 			font-size: 60px;
 			font-weight: 600;
 			font-family: "Permanent Marker";
+			text-shadow: 3px 3px rgba(172, 121, 121, 0.938);
+			font-family: "Permanent Marker";
+			color: #efefef;
 		}
 
 		.dropdown {
@@ -374,7 +377,7 @@ export default {
 	cursor: pointer;
 }
 .bm-burger-bars {
-	background-color: black;
+	background-color: #efefef;
 }
 .line-style {
 	position: absolute;
