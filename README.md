@@ -3,6 +3,8 @@ ALBUMBOX is a fully digital experience for organizing and storing memories by ha
 
 This project was built out using Vue.js, Python (Flask) and MySQL
 
+![](ezgif.com-crop.gif)
+
 # Documentation
 
 ## Project setup
