@@ -10,8 +10,8 @@ Clone the repo locally by running:
 ```
 git clone git@github.com:abcotter/postcard.git
 ```
-cd into the local repo and run:
 ```
+cd /path/to/repo
 npm install
 ```
 cd into the src folder in order to run the frontend, you'll need to run the command
@@ -24,14 +24,4 @@ In a second terminal window, you can start up the backend
 cd backend
 export FLASK_APP=api.py
 flask run
-```
-
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
-
-### Compiles and minifies for production
-```
-npm run build
 ```
