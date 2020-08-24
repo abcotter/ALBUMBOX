@@ -6,11 +6,24 @@ This project was built out using Vue.js, Python (Flask) and MySQL
 # Documentation
 
 ## Project setup
+Clone the repo locally by running:
 ```
-Clone the repo locally by running: git clone git@github.com:abcotter/postcard.git
+git clone git@github.com:abcotter/postcard.git
 ```
+cd into the local repo and run:
 ```
-cd into the local repo and run: npm install
+npm install
+```
+cd into the src folder in order to run the frontend, you'll need to run the command
+```
+cd src
+npm run serve
+```
+In a second terminal window, you can start up the backend
+```
+cd backend
+export FLASK_APP=api.py
+flask run
 ```
 
 ### Compiles and hot-reloads for development
