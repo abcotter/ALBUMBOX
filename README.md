@@ -1,5 +1,5 @@
 # ALBUMBOX
-ALBUMBOX is a fully digital experience for organizing and storing memories by harnessing. It offers a “flippable” polaroid view to allow users to keep written mementos on the reverse of their favourite photos, organized into album boxes.
+ALBUMBOX is a fully digital experience for organizing and storing memories. It offers a “flippable” polaroid view to allow users to keep written mementos on the reverse of their favourite photos, organized into album boxes.
 
 This project was built out using Vue.js, Python (Flask) and MySQL
 
