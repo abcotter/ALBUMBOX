@@ -1,8 +1,16 @@
-# postcard
+# ALBUMBOX
+ALBUMBOX is a fully digital experience for organizing and storing memories by harnessing. It offers a “flippable” polaroid view to allow users to keep written mementos on the reverse of their favourite photos, organized into album boxes.
+
+This project was built out using Vue.js, Python (Flask) and MySQL
+
+# Documentation
 
 ## Project setup
 ```
-npm install
+Clone the repo locally by running: git clone git@github.com:abcotter/postcard.git
+```
+```
+cd into the local repo and run: npm install
 ```
 
 ### Compiles and hot-reloads for development
@@ -14,16 +22,3 @@ npm run serve
 ```
 npm run build
 ```
-
-### Run your tests
-```
-npm run test
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
